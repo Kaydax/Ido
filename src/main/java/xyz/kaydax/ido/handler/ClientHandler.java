@@ -16,6 +16,22 @@ import xyz.kaydax.ido.legacy.RenderPlayerSwiming;
 
 public class ClientHandler
 {
+  public boolean underWater(Entity player)
+  {
+    // Check if player is under the water or not
+    final World world = player.getEntityWorld();
+    double eyeBlock = player.posY + (double) player.getEyeHeight() - 0.25;
+    BlockPos blockPos = new BlockPos(player.posX, eyeBlock, player.posZ);
+
+    if (world.getBlockState(blockPos).getBlock() == Blocks.WATER && !(player.getRidingEntity() instanceof EntityBoat))
+    {
+      return true;
+    } else
+    {
+      return false;
+    }
+  }
+  
   @SubscribeEvent
   public void onLivingRender(RenderPlayerEvent.Pre event)
   {
@@ -36,23 +52,6 @@ public class ClientHandler
           ((AbstractClientPlayer) event.getEntity()).rotationYaw, event.getPartialRenderTick());
     }
   }
-  
-  public boolean underWater(Entity player)
-  {
-    // Check if player is under the water or not
-    final World world = player.getEntityWorld();
-    double eyeBlock = player.posY + (double) player.getEyeHeight() - 0.25;
-    BlockPos blockPos = new BlockPos(player.posX, eyeBlock, player.posZ);
-
-    if (world.getBlockState(blockPos).getBlock() == Blocks.WATER && !(player.getRidingEntity() instanceof EntityBoat))
-    {
-      return true;
-    } else
-    {
-      return false;
-    }
-  }
-  
   
   @SubscribeEvent
   public void InputHandler(InputUpdateEvent event)
