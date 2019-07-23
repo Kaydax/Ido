@@ -3,6 +3,8 @@
 
 Brings 1.13 and 1.14 movement like swimming and crawling into 1.12.2
 
+Here is a list of all known issues: [Known Issues](https://github.com/Kaydax/Ido/issues/2)
+
 # Installing
 ### Developers:
 **Windows:** 
