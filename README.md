@@ -1,4 +1,4 @@
-# Ido
+# Idō
 [![Build Status](https://travis-ci.org/Kaydax/Ido.svg?branch=master)](https://travis-ci.org/Kaydax/Ido)
 
 Brings 1.13 and 1.14 movement like swimming and crawling into 1.12.2
