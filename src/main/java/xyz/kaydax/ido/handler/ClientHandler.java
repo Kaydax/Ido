@@ -37,6 +37,11 @@ public class ClientHandler
   {
     EntityPlayer player = event.getEntityPlayer();
     
+    if(player.noClip)
+    {
+      return;
+    }
+    
     boolean type = false;
     if (player.isInWater() && player.isSprinting() || player.height == 0.6F)
     {
@@ -61,6 +66,11 @@ public class ClientHandler
     AxisAlignedBB crawl = player.getEntityBoundingBox();
     sneak = new AxisAlignedBB(sneak.minX, sneak.minY, sneak.minZ, sneak.minX + 0.6, sneak.minY + 1.8, sneak.minZ + 0.6);
     crawl = new AxisAlignedBB(crawl.minX, crawl.minY, crawl.minZ, crawl.minX + 0.6, crawl.minY + 1.5, crawl.minZ + 0.6);
+    
+    if(player.noClip)
+    {
+      return;
+    }
     
     if(!player.isSneaking() && !underWater(player) && player.world.collidesWithAnyBlock(sneak))
     {

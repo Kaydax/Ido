@@ -51,6 +51,11 @@ public class CommonHandler
       player.setSprinting(false);
     }
     
+    if(player.noClip)
+    {
+      return;
+    }
+    
     if (player.isInWater() && player.isSprinting() && underWater(player) || player.world.collidesWithAnyBlock(axisalignedbb))
     {
       player.height = 0.6f;
@@ -86,6 +91,10 @@ public class CommonHandler
     if (entityLivingBase instanceof EntityPlayer)
     {
       EntityPlayer player = (EntityPlayer) event.getEntity();
+      if(player.noClip)
+      {
+        return;
+      }
       if (player.isInWater() && player.isSprinting())
       {
         if (player.motionX < -0.4D)
