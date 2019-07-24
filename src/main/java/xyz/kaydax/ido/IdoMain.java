@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import xyz.kaydax.ido.proxy.CommonProxy;
 import xyz.kaydax.ido.util.Referance;
 
-@Mod(modid = Referance.MODID, name = Referance.NAME, version = Referance.VERSION, acceptedMinecraftVersions = Referance.MC_VERSIONS)
+@Mod(modid = Referance.MODID, name = Referance.NAME, version = Referance.VERSION, acceptedMinecraftVersions = Referance.MC_VERSIONS, useMetadata = true, dependencies = "required:forge@[14.23.5.2811,);")
 public class IdoMain
 {
   public static final Logger LOGGER = LogManager.getLogger(Referance.NAME);

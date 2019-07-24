@@ -68,7 +68,7 @@ public class CommonHandler
     } else {
       player.eyeHeight = player.getDefaultEyeHeight();
     }
-      
+    
     try
     {
       setSize.invoke(player, player.width, player.height);
