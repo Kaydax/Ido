@@ -3,11 +3,6 @@ language: java
 jdk:
   - openjdk8
 
-addons:
-  apt:
-    packages:
-      - oracle-java8-installer
-
 install: "bash gradlew setupCIWorkspace"
 script:
   - "bash gradlew build"
