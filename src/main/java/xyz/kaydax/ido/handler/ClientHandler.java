@@ -72,7 +72,7 @@ public class ClientHandler
       return;
     }
     
-    if(!player.isSneaking() && !underWater(player) && player.height == 1.50F && player.world.collidesWithAnyBlock(sneak))
+    if(!player.isSneaking() && !underWater(player) && (player.height == 1.50F || player.height == 0.6F) && player.world.collidesWithAnyBlock(sneak))
     {
       event.getMovementInput().sneak = true;
       event.getMovementInput().moveStrafe = (float)((double)event.getMovementInput().moveStrafe * 0.3D);

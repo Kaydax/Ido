@@ -56,7 +56,7 @@ public class CommonHandler
       return;
     }
     
-    if (player.isInWater() && player.isSprinting() && underWater(player) || player.world.collidesWithAnyBlock(axisalignedbb))
+    if(player.isInWater() && player.isSprinting() && underWater(player) || player.world.collidesWithAnyBlock(axisalignedbb))
     {
       player.height = 0.6f;
       player.width = 0.6f;
