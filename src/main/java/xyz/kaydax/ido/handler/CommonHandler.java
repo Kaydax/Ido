@@ -46,14 +46,13 @@ public class CommonHandler
         player.posX - player.width / 2.0D, axisalignedbb.minY, player.posZ - player.width / 2.0D, 
         player.posX + player.width / 2.0D, axisalignedbb.minY + player.height, player.posZ + player.width / 2.0D);
     
+    if(player.noClip) { return; }
+    if(player.isOnLadder()) { return; }
+    if(player.isRiding()) { return; }
+    
     if(player.isInWater() && !underWater(player))
     {
       player.setSprinting(false);
-    }
-    
-    if(player.noClip)
-    {
-      return;
     }
     
     if(player.isInWater() && player.isSprinting() && underWater(player) || player.world.collidesWithAnyBlock(axisalignedbb))
