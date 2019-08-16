@@ -28,7 +28,7 @@ public class CommonHandler
     double eyeBlock = player.posY + (double) player.getEyeHeight() - 0.25;
     BlockPos blockPos = new BlockPos(player.posX, eyeBlock, player.posZ);
 
-    if (world.getBlockState(blockPos).getBlock() == Blocks.WATER && !(player.getRidingEntity() instanceof EntityBoat))
+    if (world.getBlockState(blockPos).getMaterial() == Material.WATER && !(player.getRidingEntity() instanceof EntityBoat))
     {
       return true;
     } else
