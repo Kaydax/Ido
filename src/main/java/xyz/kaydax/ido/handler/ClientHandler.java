@@ -46,6 +46,7 @@ public class ClientHandler
     if (player.isInWater() && player.isSprinting() || player.height == 0.6F)
     {
       event.setCanceled(true);
+      
       if (Minecraft.getMinecraft().getRenderViewEntity() instanceof AbstractClientPlayer)
       {
         AbstractClientPlayer client = ((AbstractClientPlayer) Minecraft.getMinecraft().getRenderViewEntity());
@@ -64,22 +65,22 @@ public class ClientHandler
     EntityPlayer player = event.getEntityPlayer();
     AxisAlignedBB sneak = player.getEntityBoundingBox();
     AxisAlignedBB crawl = player.getEntityBoundingBox();
-    sneak = new AxisAlignedBB(sneak.minX, sneak.minY, sneak.minZ, sneak.minX + 0.6, sneak.minY + 1.8, sneak.minZ + 0.6);
-    crawl = new AxisAlignedBB(crawl.minX, crawl.minY, crawl.minZ, crawl.minX + 0.6, crawl.minY + 1.5, crawl.minZ + 0.6);
+    sneak = new AxisAlignedBB(sneak.minX + 0.4, sneak.minY + 0.9, sneak.minZ + 0.4, sneak.minX + 0.6, sneak.minY + 1.8, sneak.minZ + 0.6);
+    crawl = new AxisAlignedBB(crawl.minX + 0.4, crawl.minY + 0.9, crawl.minZ + 0.4, crawl.minX + 0.6, crawl.minY + 1.5, crawl.minZ + 0.6);
 
     if(player.noClip)
     {
       return;
     }
 
-    if(!player.isSneaking() && !underWater(player) && (player.height == 1.50F || player.height == 0.6F) && player.world.collidesWithAnyBlock(sneak))
+    if(!player.isSneaking() && !underWater(player) && (player.height == 1.50F || player.height == 0.6F) && !player.world.getCollisionBoxes(player, sneak).isEmpty())
     {
       event.getMovementInput().sneak = true;
       event.getMovementInput().moveStrafe = (float)((double)event.getMovementInput().moveStrafe * 0.3D);
       event.getMovementInput().moveForward = (float)((double)event.getMovementInput().moveForward * 0.3D);
     }
 
-    if(player.height == 0.6f && !player.isInWater() && player.world.collidesWithAnyBlock(crawl))
+    if(player.height == 0.6f && !player.isInWater() && !player.world.getCollisionBoxes(player, crawl).isEmpty())
     {
       event.getMovementInput().sneak = false;
     }

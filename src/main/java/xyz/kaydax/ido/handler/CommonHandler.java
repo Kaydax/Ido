@@ -8,7 +8,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -42,20 +41,22 @@ public class CommonHandler
   {
     EntityPlayer player = event.player;
     AxisAlignedBB axisalignedbb = player.getEntityBoundingBox();
+    AxisAlignedBB crawl = player.getEntityBoundingBox();
     axisalignedbb = new AxisAlignedBB(
         player.posX - player.width / 2.0D, axisalignedbb.minY, player.posZ - player.width / 2.0D, 
         player.posX + player.width / 2.0D, axisalignedbb.minY + player.height, player.posZ + player.width / 2.0D);
+    crawl = new AxisAlignedBB(crawl.minX + 0.4, crawl.minY + 0.9, crawl.minZ + 0.4, crawl.minX + 0.6, crawl.minY + 1.5, crawl.minZ + 0.6);
     
     if(player.noClip) { return; }
     if(player.isOnLadder()) { return; }
-    if(player.isRiding()) { return; }
+    if(player.isRiding()) { player.eyeHeight = player.getDefaultEyeHeight(); return; }
     
     if(player.isInWater() && !underWater(player))
     {
       player.setSprinting(false);
     }
     
-    if(player.isInWater() && player.isSprinting() && underWater(player) || player.world.collidesWithAnyBlock(axisalignedbb))
+    if(player.isInWater() && player.isSprinting() && underWater(player) || !player.world.getCollisionBoxes(player, crawl).isEmpty())
     {
       player.height = 0.6f;
       player.width = 0.6f;
@@ -123,7 +124,7 @@ public class CommonHandler
         }
 
         double d3 = player.getLookVec().y;
-        double d4 = d3 < -0.2D ? 0.085D : 0.06D;
+        double d4 = d3 < -0.2D ? 0.025D : 0.025D;
 
         if (d3 <= 0.0D || player.world.getBlockState(new BlockPos(player.posX, player.posY + 1.0D - 0.64D, player.posZ))
             .getMaterial() == Material.WATER)
