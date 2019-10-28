@@ -13,6 +13,7 @@ import net.minecraftforge.client.event.InputUpdateEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import xyz.kaydax.ido.legacy.RenderPlayerSwiming;
+import xyz.kaydax.ido.util.handlers.ConfigHandler;
 
 public class ClientHandler
 {
@@ -73,16 +74,21 @@ public class ClientHandler
       return;
     }
 
-    if(!player.isSneaking() && !underWater(player) && (player.height == 1.50F || player.height == 0.6F) && !player.world.getCollisionBoxes(player, sneak).isEmpty())
+    if(!player.isSneaking() && !underWater(player) && (player.height == 1.50F || player.height == 0.6F) && !player.world.getCollisionBoxes(player, sneak).isEmpty() && ConfigHandler.SNEAK_TOGGLE)
     {
       event.getMovementInput().sneak = true;
       event.getMovementInput().moveStrafe = (float)((double)event.getMovementInput().moveStrafe * 0.3D);
       event.getMovementInput().moveForward = (float)((double)event.getMovementInput().moveForward * 0.3D);
     }
 
-    if(player.height == 0.6f && !player.isInWater() && !player.world.getCollisionBoxes(player, crawl).isEmpty())
+    if(player.height == 0.6f && !player.isInWater() && !player.world.getCollisionBoxes(player, crawl).isEmpty() && ConfigHandler.CRAWL_TOGGLE)
     {
       event.getMovementInput().sneak = false;
+      if(!ConfigHandler.SNEAK_TOGGLE) //This is to make sure crawling is still slow if sneaking is disabled
+      {
+        event.getMovementInput().moveStrafe = (float)((double)event.getMovementInput().moveStrafe * 0.3D);
+        event.getMovementInput().moveForward = (float)((double)event.getMovementInput().moveForward * 0.3D);
+      }
     }
   }
 }

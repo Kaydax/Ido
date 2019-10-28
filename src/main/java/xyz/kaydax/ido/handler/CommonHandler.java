@@ -15,10 +15,15 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import xyz.kaydax.ido.util.handlers.ConfigHandler;
 
 public class CommonHandler
 {
   public static Method setSize = ObfuscationReflectionHelper.findMethod(Entity.class, "func_70105_a", void.class, float.class, float.class);
+  
+  //These I hope will allow other mod developers to detect if the player is swimming / crawling or sneaking if they need to fix something or add compatibility for our bad code lol.
+  public static boolean IsSwimmingOrCrawling = false; 
+  public static boolean IsSneaking = false;
   
   public boolean underWater(Entity player)
   {
@@ -56,17 +61,21 @@ public class CommonHandler
       player.setSprinting(false);
     }
     
-    if(player.isInWater() && player.isSprinting() && underWater(player) || !player.world.getCollisionBoxes(player, crawl).isEmpty())
+    if((player.isInWater() && player.isSprinting() && underWater(player) && ConfigHandler.SWIM_TOGGLE) || (!player.world.getCollisionBoxes(player, crawl).isEmpty() && ConfigHandler.CRAWL_TOGGLE))
     {
       player.height = 0.6f;
       player.width = 0.6f;
       player.eyeHeight = 0.45f;
-    } else if(player.isSneaking() && !underWater(player)) {
+      IsSwimmingOrCrawling = true;
+    } else if(player.isSneaking() && !underWater(player) && ConfigHandler.SNEAK_TOGGLE) {
       player.height = 1.50f;
       player.width = 0.6f;
       player.eyeHeight = 1.35f;
+      IsSneaking = true;
     } else {
       player.eyeHeight = player.getDefaultEyeHeight();
+      IsSwimmingOrCrawling = false;
+      IsSneaking = false;
     }
     
     try
@@ -95,7 +104,7 @@ public class CommonHandler
       {
         return;
       }
-      if (player.isInWater() && player.isSprinting())
+      if (player.isInWater() && player.isSprinting() && ConfigHandler.SWIM_TOGGLE)
       {
         if (player.motionX < -0.4D)
         {
@@ -126,11 +135,9 @@ public class CommonHandler
         double d3 = player.getLookVec().y;
         double d4 = d3 < -0.2D ? 0.025D : 0.025D;
 
-        if (d3 <= 0.0D || player.world.getBlockState(new BlockPos(player.posX, player.posY + 1.0D - 0.64D, player.posZ))
-            .getMaterial() == Material.WATER)
+        if (d3 <= 0.0D || player.world.getBlockState(new BlockPos(player.posX, player.posY + 1.0D - 0.64D, player.posZ)).getMaterial() == Material.WATER && ConfigHandler.SWIM_TOGGLE)
         {
           player.motionY += (d3 - player.motionY) * d4;
-
         }
 
         // double d6 = player.posY; //Unused

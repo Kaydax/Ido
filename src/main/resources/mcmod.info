@@ -3,7 +3,7 @@
   "modid": "ido",
   "name": "Ido - 1.12 movement enhancement",
   "description": "Brings 1.13 and 1.14 movement like swimming and crawling into 1.12.2",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "mcversion": "${mcversion}",
   "url": "https://github.com/Kaydax/Ido",
   "updateUrl": "",
