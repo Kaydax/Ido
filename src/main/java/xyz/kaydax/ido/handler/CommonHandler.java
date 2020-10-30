@@ -31,14 +31,9 @@ public class CommonHandler
     final World world = player.getEntityWorld();
     double eyeBlock = player.posY + (double) player.getEyeHeight() - 0.25;
     BlockPos blockPos = new BlockPos(player.posX, eyeBlock, player.posZ);
-
-    if (world.getBlockState(blockPos).getMaterial() == Material.WATER && !(player.getRidingEntity() instanceof EntityBoat))
-    {
-      return true;
-    } else
-    {
-      return false;
-    }
+    
+    //If the check passes, return true, else return false
+    return (world.getBlockState(blockPos).getMaterial() == Material.WATER && !(player.getRidingEntity() instanceof EntityBoat)) ? true : false; //Clean this code up to be one line
   }
   
   @SubscribeEvent
@@ -52,9 +47,9 @@ public class CommonHandler
         player.posX + player.width / 2.0D, axisalignedbb.minY + player.height, player.posZ + player.width / 2.0D);
     crawl = new AxisAlignedBB(crawl.minX + 0.4, crawl.minY + 0.9, crawl.minZ + 0.4, crawl.minX + 0.6, crawl.minY + 1.5, crawl.minZ + 0.6);
     
-    if(player.noClip) { return; }
-    if(player.isOnLadder()) { return; }
-    if(player.isRiding()) { player.eyeHeight = player.getDefaultEyeHeight(); return; }
+    if(player.noClip) return; //We really shouldn't do anything when they are creative flying
+    if(player.isOnLadder()) return; //We don't want our player to crawl on ladders
+    if(player.isRiding()) { player.eyeHeight = player.getDefaultEyeHeight(); return; } //The Player is riding something, lets make sure they get returned to normal
     
     if(player.isInWater() && !underWater(player))
     {
@@ -100,10 +95,7 @@ public class CommonHandler
     if (entityLivingBase instanceof EntityPlayer)
     {
       EntityPlayer player = (EntityPlayer) event.getEntity();
-      if(player.noClip)
-      {
-        return;
-      }
+      if(player.noClip) return;
       if (player.isInWater() && player.isSprinting() && ConfigHandler.SWIM_TOGGLE)
       {
         if (player.motionX < -0.4D)
@@ -142,7 +134,7 @@ public class CommonHandler
 
         // double d6 = player.posY; //Unused
 
-        player.motionY += 0.018D;
+        player.motionY += 0.018d;
 
         player.motionX *= 1.005F;
         player.motionZ *= 1.005F;

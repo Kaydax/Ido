@@ -1,16 +1,17 @@
 [
 {
   "modid": "ido",
-  "name": "Ido - 1.12 movement enhancement",
-  "description": "Brings 1.13 and 1.14 movement like swimming and crawling into 1.12.2",
-  "version": "1.1.0",
+  "name": "Ido - 1.12 movement enhancements",
+  "description": "Brings 1.13 and 1.14 swimming, crawling and sneaking into 1.12.2",
+  "version": "2.0.0-B",
   "mcversion": "${mcversion}",
   "url": "https://github.com/Kaydax/Ido",
   "updateUrl": "",
   "authorList": ["Kaydax_", "bagu_chan"],
-  "credits": "Original mod BetterSwimming was made by bagu_chan. Enhancments and tweeks made by Kaydax_",
+  "credits": "Original mod BetterSwimming was made by bagu_chan. Enhancements and tweaks made by Kaydax_",
   "logoFile": "",
   "screenshots": [],
+  "requiredMods": ["obfuscate"],
   "dependencies": []
 }
 ]

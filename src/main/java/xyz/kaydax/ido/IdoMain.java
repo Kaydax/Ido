@@ -11,7 +11,7 @@ import xyz.kaydax.ido.proxy.CommonProxy;
 import xyz.kaydax.ido.util.Referance;
 import xyz.kaydax.ido.util.handlers.ConfigHandler;
 
-@Mod(modid = Referance.MODID, name = Referance.NAME, version = Referance.VERSION, acceptedMinecraftVersions = Referance.MC_VERSIONS, useMetadata = true, dependencies = "required:forge@[14.23.5.2811,);")
+@Mod(modid = Referance.MODID, name = Referance.NAME, version = Referance.VERSION, acceptedMinecraftVersions = Referance.MC_VERSIONS, useMetadata = true, dependencies = "required:forge@[14.23.5.2811,);required:obfuscate@[0.4.0,);")
 public class IdoMain
 { 
   public static File config;
