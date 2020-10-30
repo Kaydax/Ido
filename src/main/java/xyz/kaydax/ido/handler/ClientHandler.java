@@ -65,16 +65,13 @@ public class ClientHandler
       //
       if((player.isInWater() && player.isSprinting() || player.height == 0.6f) && !player.isElytraFlying())
       {
-        if(player.isOnLadder()) return; //We don't want our player to crawl on ladders
-        if(player.isRiding()) return; //The Player is riding something, lets make sure they get returned to normal
-        
         //If the local player is in first person, hide the animations. If there is another client crawling, show them always (Yes this is very lazy)
         if(Minecraft.getMinecraft().gameSettings.thirdPersonView >= 1 || !event.getEntityPlayer().isUser())
         {
           GlStateManager.rotate(45.0F, 1.0F, 0.0F, 0.0F);
           GlStateManager.translate(0.0F, 0.0F, -0.7F);
           
-          float swing = player.limbSwing / 2;
+          float swing = player.limbSwing / 3;
           
           pm.bipedHead.rotateAngleX = -0.95f; //Head
           pm.bipedHeadwear.rotateAngleX = -0.95f; //Hat texture
