@@ -15,6 +15,7 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import xyz.kaydax.ido.init.ModKeys;
 import xyz.kaydax.ido.util.handlers.ConfigHandler;
 
 public class CommonHandler
@@ -42,10 +43,10 @@ public class CommonHandler
     EntityPlayer player = event.player;
     AxisAlignedBB axisalignedbb = player.getEntityBoundingBox();
     AxisAlignedBB crawl = player.getEntityBoundingBox();
-    axisalignedbb = new AxisAlignedBB(
-        player.posX - player.width / 2.0D, axisalignedbb.minY, player.posZ - player.width / 2.0D, 
-        player.posX + player.width / 2.0D, axisalignedbb.minY + player.height, player.posZ + player.width / 2.0D);
-    crawl = new AxisAlignedBB(crawl.minX + 0.4, crawl.minY + 0.9, crawl.minZ + 0.4, crawl.minX + 0.6, crawl.minY + 1.5, crawl.minZ + 0.6);
+      //  axisalignedbb = new AxisAlignedBB(
+     //   player.posX - player.width / 2.0D, axisalignedbb.minY, player.posZ - player.width / 2.0D, 
+    //    player.posX + player.width / 2.0D, axisalignedbb.minY + player.height, player.posZ + player.width / 2.0D);
+    //crawl = new AxisAlignedBB(crawl.minX + 0.4, crawl.minY + 0.9, crawl.minZ + 0.4, crawl.minX + 0.6, crawl.minY + 1.5, crawl.minZ + 0.6);
     
     if(player.noClip) return; //We really shouldn't do anything when they are creative flying
     if(player.isOnLadder()) return; //We don't want our player to crawl on ladders
@@ -56,16 +57,18 @@ public class CommonHandler
       player.setSprinting(false);
     }
     
-    if((player.isInWater() && player.isSprinting() && underWater(player) && ConfigHandler.SWIM_TOGGLE) || (!player.world.getCollisionBoxes(player, crawl).isEmpty() && ConfigHandler.CRAWL_TOGGLE))
+    if((player.isInWater() && player.isSprinting() && underWater(player) && ConfigHandler.SWIM_TOGGLE) || ((!player.world.getCollisionBoxes(player, crawl).isEmpty() || ModKeys.crawling.isKeyDown()) && ConfigHandler.CRAWL_TOGGLE))
     {
       player.height = 0.6f;
       player.width = 0.6f;
       player.eyeHeight = 0.45f;
+      axisalignedbb = new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.minX + player.width, axisalignedbb.minY + player.height, axisalignedbb.minZ + player.width); //If player when crawling is not colliding with something, hitbox anyway will be small;
       IsSwimmingOrCrawling = true;
     } else if(player.isSneaking() && !underWater(player) && ConfigHandler.SNEAK_TOGGLE) {
       player.height = 1.50f;
       player.width = 0.6f;
       player.eyeHeight = 1.35f;
+      axisalignedbb = new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.minX + player.width, axisalignedbb.minY + player.height, axisalignedbb.minZ + player.width); //If player when crawling is not colliding with something, hitbox anyway will be small;
       IsSneaking = true;
     } else {
       player.eyeHeight = player.getDefaultEyeHeight();

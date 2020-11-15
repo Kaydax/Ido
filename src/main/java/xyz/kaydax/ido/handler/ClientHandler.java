@@ -12,6 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.InputUpdateEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import xyz.kaydax.ido.init.ModKeys;
 import xyz.kaydax.ido.util.handlers.ConfigHandler;
 import com.mrcrayfish.obfuscate.client.event.ModelPlayerEvent;
 
@@ -27,31 +28,6 @@ public class ClientHandler
     //If the check passes, return true, else return false
     return (world.getBlockState(blockPos).getMaterial() == Material.WATER && !(player.getRidingEntity() instanceof EntityBoat)) ? true : false; //Clean this code up to be one line
   }
-
-  //Really old and bad code... don't use this anymore, its really really bad with many incompatibility's
-  /*@SubscribeEvent
-  public void onLivingRender(RenderPlayerEvent.Pre event)
-  {
-    EntityPlayer player = event.getEntityPlayer();
-
-    if(player.noClip) return; //If the player is creative flying, we don't need to do anything
-
-    boolean type = false;
-    if(player.isInWater() && player.isSprinting() || player.height == 0.6F)
-    {
-      event.setCanceled(true);
-      
-      if (Minecraft.getMinecraft().getRenderViewEntity() instanceof AbstractClientPlayer)
-      {
-        AbstractClientPlayer client = ((AbstractClientPlayer) Minecraft.getMinecraft().getRenderViewEntity());
-        type = client.getSkinType().equals("slim");
-      }
-
-      RenderPlayerSwiming sp = new RenderPlayerSwiming(event.getRenderer().getRenderManager(), type);
-      sp.doRender(((AbstractClientPlayer) event.getEntity()), event.getX(), event.getY(), event.getZ(),
-          ((AbstractClientPlayer) event.getEntity()).rotationYaw, event.getPartialRenderTick());
-    }
-  }*/
   
   //New good code that makes animations easy thanks to Obfuscate!
   @SubscribeEvent
@@ -59,11 +35,13 @@ public class ClientHandler
   {
       EntityPlayer player = event.getEntityPlayer();
       ModelPlayer pm = event.getModelPlayer();
-    
+      AxisAlignedBB crawl = player.getEntityBoundingBox();
+      crawl = new AxisAlignedBB(crawl.minX + 0.4, crawl.minY + 0.9, crawl.minZ + 0.4, crawl.minX + 0.6, crawl.minY + 1.5, crawl.minZ + 0.6);
+      
       if(player.noClip) return;
       
       //
-      if((player.isInWater() && player.isSprinting() || player.height == 0.6f) && !player.isElytraFlying())
+      if((player.isInWater() && player.isSprinting() || player.height == 0.6f)&& !(!player.world.getCollisionBoxes(player, crawl).isEmpty() || ModKeys.crawling.isKeyDown()) && !player.isElytraFlying())
       {
         //If the local player is in first person, hide the animations. If there is another client crawling, show them always (Yes this is very lazy)
         if(Minecraft.getMinecraft().gameSettings.thirdPersonView >= 1 || !event.getEntityPlayer().isUser())
@@ -86,6 +64,47 @@ public class ClientHandler
           pm.bipedLeftArmwear.rotateAngleY = swing;
           pm.bipedRightArmwear.rotateAngleY = -swing;
         }
+      }else if(player.height == 0.6f && !player.isInWater() && (!player.world.getCollisionBoxes(player, crawl).isEmpty() || ModKeys.crawling.isKeyDown()) && ConfigHandler.CRAWL_TOGGLE) {
+          //If the local player is in first person, hide the animations. If there is another client crawling, show them always (Yes this is very lazy)
+          if(Minecraft.getMinecraft().gameSettings.thirdPersonView >= 1 || !event.getEntityPlayer().isUser())
+          {
+            GlStateManager.rotate(45.0F, 1.0F, 0.0F, 0.0F);
+            GlStateManager.translate(0.0F, 0.0F, -0.7F);
+            
+            float premove = -3.0f;
+            float move = (0.1f)*((float) Math.sin(2*(player.limbSwing) / 3));
+                        
+            pm.bipedHead.rotateAngleX = -0.95f; //Head
+            pm.bipedHeadwear.rotateAngleX = -0.95f; //Hat texture
+            
+            //Make sure to rotate both the arm and the arm jacket texture
+            pm.bipedRightArm.offsetY = -move;
+            pm.bipedLeftArm.offsetY = move;
+            pm.bipedRightArm.offsetY = -move;
+            pm.bipedLeftLeg.offsetY = move;
+            pm.bipedRightLeg.offsetY = -move;
+            pm.bipedLeftArmwear.offsetY = move;
+            pm.bipedRightArmwear.offsetY = -move;
+            pm.bipedLeftLegwear.offsetY = move;
+            pm.bipedRightLegwear.offsetY = -move;
+            //Hand preposition applied
+            pm.bipedLeftArm.rotateAngleX = premove + move;
+            pm.bipedRightArm.rotateAngleX =premove +  move;
+            pm.bipedLeftArm.rotateAngleY = move;
+            pm.bipedRightArm.rotateAngleY = -move;
+            pm.bipedLeftArmwear.rotateAngleX = premove + move;
+            pm.bipedRightArmwear.rotateAngleX = premove + move;
+            pm.bipedLeftArmwear.rotateAngleY = move;
+            pm.bipedRightArmwear.rotateAngleY = -move;
+            pm.bipedLeftLeg.rotateAngleX = move;
+            pm.bipedRightLeg.rotateAngleX = move;
+            pm.bipedLeftLeg.rotateAngleY = move;
+            pm.bipedRightLeg.rotateAngleY = -move;
+            pm.bipedLeftLegwear.rotateAngleX = move;
+            pm.bipedRightLegwear.rotateAngleX = move;
+            pm.bipedLeftLegwear.rotateAngleY = move;
+            pm.bipedRightLegwear.rotateAngleY = -move;
+          }
       }
   }
 
@@ -108,7 +127,7 @@ public class ClientHandler
       event.getMovementInput().moveForward = (float)((double)event.getMovementInput().moveForward * 0.3D);
     }
 
-    if(player.height == 0.6f && !player.isInWater() && !player.world.getCollisionBoxes(player, crawl).isEmpty() && ConfigHandler.CRAWL_TOGGLE)
+    if(player.height == 0.6f && !player.isInWater() && (!player.world.getCollisionBoxes(player, crawl).isEmpty() || ModKeys.crawling.isKeyDown()) && ConfigHandler.CRAWL_TOGGLE)
     {
       event.getMovementInput().sneak = false;
       if(!ConfigHandler.SNEAK_TOGGLE) //This is to make sure crawling is still slow if sneaking is disabled
