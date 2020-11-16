@@ -12,7 +12,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.InputUpdateEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import xyz.kaydax.ido.init.ModKeys;
 import xyz.kaydax.ido.util.handlers.ConfigHandler;
 import com.mrcrayfish.obfuscate.client.event.ModelPlayerEvent;
 
@@ -41,7 +40,7 @@ public class ClientHandler
       if(player.noClip) return;
       
       //
-      if((player.isInWater() && player.isSprinting() || player.height == 0.6f)&& !(!player.world.getCollisionBoxes(player, crawl).isEmpty() || ModKeys.crawling.isKeyDown()) && !player.isElytraFlying())
+      if((player.isInWater() && player.isSprinting() || (player.isInWater() && player.height == 0.6f)) && !player.isElytraFlying())
       {
         //If the local player is in first person, hide the animations. If there is another client crawling, show them always (Yes this is very lazy)
         if(Minecraft.getMinecraft().gameSettings.thirdPersonView >= 1 || !event.getEntityPlayer().isUser())
@@ -64,7 +63,7 @@ public class ClientHandler
           pm.bipedLeftArmwear.rotateAngleY = swing;
           pm.bipedRightArmwear.rotateAngleY = -swing;
         }
-      }else if(player.height == 0.6f && !player.isInWater() && (!player.world.getCollisionBoxes(player, crawl).isEmpty() || ModKeys.crawling.isKeyDown()) && ConfigHandler.CRAWL_TOGGLE) {
+      }else if(player.height == 0.6f && !player.isInWater() && !player.world.getCollisionBoxes(player, crawl).isEmpty() && ConfigHandler.CRAWL_TOGGLE) {
           //If the local player is in first person, hide the animations. If there is another client crawling, show them always (Yes this is very lazy)
           if(Minecraft.getMinecraft().gameSettings.thirdPersonView >= 1 || !event.getEntityPlayer().isUser())
           {
@@ -127,7 +126,7 @@ public class ClientHandler
       event.getMovementInput().moveForward = (float)((double)event.getMovementInput().moveForward * 0.3D);
     }
 
-    if(player.height == 0.6f && !player.isInWater() && (!player.world.getCollisionBoxes(player, crawl).isEmpty() || ModKeys.crawling.isKeyDown()) && ConfigHandler.CRAWL_TOGGLE)
+    if(player.height == 0.6f && !player.isInWater() && !player.world.getCollisionBoxes(player, crawl).isEmpty() && ConfigHandler.CRAWL_TOGGLE)
     {
       event.getMovementInput().sneak = false;
       if(!ConfigHandler.SNEAK_TOGGLE) //This is to make sure crawling is still slow if sneaking is disabled
