@@ -57,18 +57,18 @@ public class CommonHandler
       player.setSprinting(false);
     }
     
-    if((player.isInWater() && player.isSprinting() && underWater(player) && ConfigHandler.SWIM_TOGGLE) || ((!player.world.getCollisionBoxes(player, crawl).isEmpty() || ModKeys.crawling.isKeyDown()) && ConfigHandler.CRAWL_TOGGLE))
+    if((player.isInWater() && player.isSprinting() && underWater(player) && ConfigHandler.SWIM_TOGGLE) || (!player.world.getCollisionBoxes(player, crawl).isEmpty() && ConfigHandler.CRAWL_TOGGLE))
     {
       player.height = 0.6f;
       player.width = 0.6f;
       player.eyeHeight = 0.45f;
-      axisalignedbb = new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.minX + player.width, axisalignedbb.minY + player.height, axisalignedbb.minZ + player.width); //If player when crawling is not colliding with something, hitbox anyway will be small;
+      axisalignedbb = new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.minX + player.width, axisalignedbb.minY + player.height, axisalignedbb.minZ + player.width); //utilizing hitbox code;
       IsSwimmingOrCrawling = true;
     } else if(player.isSneaking() && !underWater(player) && ConfigHandler.SNEAK_TOGGLE) {
       player.height = 1.50f;
       player.width = 0.6f;
       player.eyeHeight = 1.35f;
-      axisalignedbb = new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.minX + player.width, axisalignedbb.minY + player.height, axisalignedbb.minZ + player.width); //If player when crawling is not colliding with something, hitbox anyway will be small;
+      axisalignedbb = new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.minX + player.width, axisalignedbb.minY + player.height, axisalignedbb.minZ + player.width); //utilizing hitbox code;
       IsSneaking = true;
     } else {
       player.eyeHeight = player.getDefaultEyeHeight();
